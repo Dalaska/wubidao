@@ -300,11 +300,11 @@ def quiz_loop(
         total, wrong = stats.get(word, (0, 0))
         if user_in == code:
             stats[word] = (total + 1, wrong)
-            print_fn("✅ 对啦!")
+            print_fn("✅")
             i += 1
         else:
-            print_fn("\n" * 10)
-            print_fn("😅 不对哦，再试一次")
+            print_fn("\n" * 40)
+            print_fn("😅")
             print_fn(f"\033[33m{word}: {code}\033[0m")
             stats[word] = (total + 1, wrong + 1)
             i = 0
@@ -351,30 +351,8 @@ def tutorial(input_fn=input, print_fn=print):
 # Main Entry
 # ==========================================
 def main() -> None:
-    art = r"""
-                                                                                                  
-                                                                                                  
-                                       @@         @@                      -@@       @@            
-         @@@@@@@@@@@@@@@@@@@@@@       @@@@@@@@@@ @@@@@@@@@@@+    @@@        @@    #@              
-                 %@@                 @@  -@     @@   @@            @@@ @@@@@@@@@@@@@@@@@@         
-                 @@                @@@    @@  -@@     @@                       @                  
-                 @@                              :@@@@@@@@               @@@@@@@@@@@@@@           
-                 @@                   @@@@@@@@@@                @@@@@@   -@          @@           
-           @@@@@@@@@@@@@@@@@                  .@      +%@@          @@   -@@@@@@@@@@@@@           
-                @@        @@         @@@@@@@@@@@@@@@@@              @@   -@          @@           
-                @@       =@@                  .@                    @@   -@@@@@@@@@@@@@           
-               #@#       @@                @@@@@@@@@@@@@@@@@@       @@   -@          @@           
-               @@        @@         @@@@@@*   %@                    @@   *@@@@@@@@@@@@@           
-        @@@@@@@@@@@@@@@@@@@@@@@@@             @@          @@     @@@#@@@@                         
-        -                      ..              @@@@@@@@@@@@@    @@       @@@@@@@@@@@@@@@@         
-                                                                                                  
-                                                                                                  
-                                                                                                  
-                                                                                                  
-    """
-    print("\033[1;33m" + art + "\033[0m")  # gold tone (bright yellow)
-  
-
+    print("🖐️  📝 🛤️  starting ...")
+                                
     level_set = build_level_set(BASE_KEYS, ADD_NEW)
     progress = read_progress(PROGRESS_FILE)
     level = int(progress.get("level", 0))
@@ -394,7 +372,7 @@ def main() -> None:
         known_keys = get_keys_for_level(level, level_set)
 
     while True:
-        print(f"\033[91m level: {level}\033[0m")
+        print(f"\033[33m level: {level}\033[0m")
         candidate_words = select_practice_words(known_keys, COMMON_WORD_MAP, PROGRESS_FILE)
         candidate_words = candidate_words[:CANDIDATE_LIMIT_DEFAULT]
 
@@ -402,12 +380,12 @@ def main() -> None:
         all_stats = save_progress(session_stats, PROGRESS_FILE, level=level)
 
         if exit_flag:
-            print("👋 已退出练习，进度已成功保存。")
+            print("👋 bye")
             break
 
         if wubidao_progress_policy(all_stats) and level < max_level:
             level += 1
-            print(f"\033[33m🚀达到level: {level} 解锁 {ADD_NEW.get(level, '')}\033[0m")
+            print(f"\033[33m🚀升级! 解锁 {ADD_NEW.get(level, '')}\033[0m")
             save_progress({}, PROGRESS_FILE, level=level)
             known_keys = get_keys_for_level(level, level_set)
             print_wubi_table(known_world=known_keys, new_block=ADD_NEW.get(level))
@@ -420,4 +398,4 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print("\n👋 已中断练习。")
+        print("\n👋")
